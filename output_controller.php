@@ -8,3 +8,8 @@
 	stuff: [ [event1, reason1], [event2, reason2], ...]
  }
 */
+
+
+$ranking = [];
+
+json_encode($ranking);

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>documents</key>
+	<array>
+		<dict>
+			<key>filename</key>
+			<string>.gitignore</string>
+			<key>lastUsed</key>
+			<date>2012-03-04T04:45:40Z</date>
+			<key>selected</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>indigo-plateau.php</string>
+			<key>lastUsed</key>
+			<date>2012-03-05T19:45:23Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>input_controller.php</string>
+			<key>lastUsed</key>
+			<date>2012-03-05T19:45:21Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>output_controller.php</string>
+			<key>lastUsed</key>
+			<date>2012-03-05T19:45:20Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>readme.txt</string>
+			<key>lastUsed</key>
+			<date>2012-03-05T19:32:00Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>indigo-plateau-admin.php</string>
+			<key>lastUsed</key>
+			<date>2012-03-05T19:34:18Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>view.html</string>
+			<key>lastUsed</key>
+			<date>2012-03-05T19:37:52Z</date>
+		</dict>
+	</array>
+	<key>fileHierarchyDrawerWidth</key>
+	<integer>200</integer>
+	<key>metaData</key>
+	<dict/>
+	<key>showFileHierarchyDrawer</key>
+	<false/>
+	<key>showFileHierarchyPanel</key>
+	<true/>
+	<key>treeState</key>
+	<dict/>
+	<key>windowFrame</key>
+	<string>{{131, 74}, {1067, 704}}</string>
+</dict>
+</plist>

@@ -9,4 +9,10 @@ $time = strip_tags($_POST["time"]);
 
 // inserts into DB
 
+$wpdb->insert(
+
+);
+
 // sends confirmation to UI
+
+$html = '';
