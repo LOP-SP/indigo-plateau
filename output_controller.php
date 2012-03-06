@@ -5,10 +5,16 @@
  {
 	name: name,
 	total_points: total_points,
-	stuff: [ [event1, reason1], [event2, reason2], ...]
+	stuff: [ [event1, reason1, time1], [event2, reason2, time2], ...]
  }
 */
 
+// Template tag: Returns the ranking HTML table.
+function indigo_plateau_ranking () {
+	$ranking = '';
+	
+	return $ranking;
+}
 
 $ranking = [];
 

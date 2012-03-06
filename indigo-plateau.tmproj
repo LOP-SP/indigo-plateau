@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>input_controller.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -14,33 +16,33 @@
 		</dict>
 		<dict>
 			<key>filename</key>
+			<string>indigo-plateau-admin.php</string>
+			<key>lastUsed</key>
+			<date>2012-03-05T19:34:18Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
 			<string>indigo-plateau.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-05T19:45:23Z</date>
+			<date>2012-03-05T21:23:17Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>input_controller.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-05T19:45:21Z</date>
+			<date>2012-03-05T21:23:21Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>output_controller.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-05T19:45:20Z</date>
+			<date>2012-03-05T21:23:21Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>readme.txt</string>
 			<key>lastUsed</key>
 			<date>2012-03-05T19:32:00Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>indigo-plateau-admin.php</string>
-			<key>lastUsed</key>
-			<date>2012-03-05T19:34:18Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -52,7 +54,56 @@
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
-	<dict/>
+	<dict>
+		<key>indigo-plateau.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>58</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>20</integer>
+		</dict>
+		<key>input_controller.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>output_controller.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>13</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>indigo-plateau.php</string>
+		<string>output_controller.php</string>
+		<string>input_controller.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>showFileHierarchyPanel</key>

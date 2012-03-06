@@ -2,17 +2,26 @@
  Inserts player's data into DB.
 */
 
-$name = strip_tags($_POST["name"]);
-$event = strip_tags($_POST["event"]);
-$reason = strip_tags($_POST["reason"]);
-$time = strip_tags($_POST["time"]);
-
-// inserts into DB
-
-$wpdb->insert(
-
-);
-
-// sends confirmation to UI
-
-$html = '';
+function ip_insert_win ($name, $time, $event, $reason) {
+	global $wpdb, $reasons;
+	
+	$points = $reasons($reason);
+	
+	$wpdb->insert(
+		$wpdb->prefix . 'indigo_plateau',
+		array(
+			'name' => $name,
+			'time' => $time,
+			'event' => $event,
+			'reason' => $reason,
+			'points' => $points
+		),
+		array(
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%d'
+		)
+	);
+}
