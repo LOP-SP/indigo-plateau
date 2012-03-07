@@ -31,20 +31,20 @@ function indigo_plateau_activate () {
 	
 	$table_name = $wpdb->prefix . 'indigo_plateau';
 	
-	$create_table_sql = "CREATE TABLE IF NOT EXISTS $table_name (
-	  id mediumint(9) NOT NULL AUTO_INCREMENT,
-	  name VARCHAR(100) NOT NULL,
-	  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-	  event text DEFAULT '' NOT NULL,
-	  reason VARCHAR(255) NOT NULL,
-		points int NOT NULL,
-	  UNIQUE KEY id (id)
-	);";
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		  id int NOT NULL AUTO_INCREMENT,
+		  name VARCHAR(255) NOT NULL,
+		  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		  event text DEFAULT '' NOT NULL,
+		  reason VARCHAR(255) NOT NULL,
+			points int NOT NULL,
+		  UNIQUE KEY id (id)
+		);";
 	
-	$wpdb->query($create_table_sql);
+	$wpdb->query($sql);
 }
 
-register_activation_hook( __FILE__, 'indigo_plateau_activate' );
+register_activation_hook( WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', 'indigo_plateau_activate' );
 
 // Menu
 function indigo_plateau_admin () {
@@ -73,7 +73,7 @@ $reasons = array(
 function ip_insert_win ($name, $time, $event, $reason) {
 	global $wpdb, $reasons;
 	
-	$points = $reasons($reason);
+	$points = $reasons[$reason];
 	
 	$wpdb->insert(
 		$wpdb->prefix . 'indigo_plateau',
