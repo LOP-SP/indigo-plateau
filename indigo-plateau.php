@@ -52,7 +52,7 @@ function indigo_plateau_admin () {
 }
 
 function indigo_plateau_admin_actions () {
-	add_options_page( 'Indigo Plateau', 'Indigo Plateau', 1, 'Indigo Plateau', 'indigo_plateau_admin' );
+	add_options_page( 'Indigo Plateau', 'Indigo Plateau', 10, 'Indigo-Plateau', 'indigo_plateau_admin' );
 }
 
 add_action( 'admin_menu', 'indigo_plateau_admin_actions' );
