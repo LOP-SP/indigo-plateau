@@ -99,13 +99,10 @@ function ip_insert_win ($name, $time, $event, $reason) {
 function indigo_plateau_ranking () {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'indigo_plateau';
-	$i = 0;
-	$row;
-	$ranking = '';
 	
-	// Array to hold scores from the players.
+	$i = 0;
 	$players = array();
-	$players = array_fill(0, 100, 0);
+	$row;
 	
 	while (($row = $wpdb->get_row("SELECT name, event, reason, points FROM $table_name", $i)) != NULL) {
 		$players[$row->name] += $row->points;
@@ -113,26 +110,28 @@ function indigo_plateau_ranking () {
 		$i++;
 	}
 	
+	// Sort players in decreasing order of total points.
 	arsort($players);
-	
-	// HTML table
-	$ranking += "<div id='tabela-ranking'><table>";
-	$ranking += "<colgroup>";
-	$ranking += "<col class='coluna-jogadores' />";
-	$ranking += "<col class='coluna-pontos' />";
-	$ranking += "</colgroup>";
-	$ranking += "<tr><th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th></tr>";
+
+	// HTML table creation.
+	$ranking = "";
+	$ranking .= "<div id='tabela-ranking'><table>";
+	$ranking .= "<colgroup>";
+	$ranking .=	"<col class='coluna-jogadores' />";
+	$ranking .= "<col class='coluna-pontos' />";
+	$ranking .= "</colgroup>";
+	$ranking .= "<tr><th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th></tr>";
 	
 	foreach ($players as $name => $points) {
-		$ranking += "<tr>";
-		$ranking += "<td>" . $name . "</td>";
-		$ranking += "<td>" . $points . "</td>";
-		$ranking += "</tr>";
+		$ranking .= "<tr>";
+		$ranking .= "<td>" . $name . "</td>";
+		$ranking .= "<td>" . $points . "</td>";
+		$ranking .= "</tr>";
 	}
 	
-	$ranking += "</table></div>";
-	
-	return $ranking;
+	$ranking .= "</table></div>";
+
+	echo $ranking;
 }
 
 ?>
