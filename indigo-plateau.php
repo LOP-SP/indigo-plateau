@@ -1,6 +1,7 @@
 <?php
 /*
 Plugin Name: Indigo Plateau
+Plugin URI: http://github.com/agarie/indigo-plateau
 Description: A ranking creation plugin used for championships.
 Version: 1.0
 Author: Carlos Onox Agarie
@@ -24,8 +25,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-
+// Install function
 function indigo_plateau_activate () {
 	global $wpdb;
 	
@@ -46,23 +46,14 @@ function indigo_plateau_activate () {
 
 register_activation_hook( __FILE__, 'indigo_plateau_activate' );
 
-function indigo_plateau_menu () {
-	global $wpdb;
-	
-	require_once './indigo-plateau-admin.php';
-}
-
+// Menu
 function indigo_plateau_admin_actions () {
-    add_options_page(
-			"Indigo Plateau",
-			"Indigo Plateau",
-			1,
-			"Player's ranking",
-			"indigo_plateau_menu"
-		);
+	add_options_page(  );
 }
 
-// Hash to store reasons
+add_action( 'admin_menu', 'indigo_plateau_admin_actions' );
+
+// Hash to store reasons.
 global $reasons;
 $reasons = array(
 	"ganharTorneio" => 15,
@@ -74,8 +65,7 @@ $reasons = array(
 	"criarRegra" => 5
 );
 
-add_action( 'admin_menu', 'indigo_plateau_admin_actions' );
-
+// Insert a new entry when a player receives points.
 function ip_insert_win ($name, $time, $event, $reason) {
 	global $wpdb, $reasons;
 	
@@ -100,6 +90,8 @@ function ip_insert_win ($name, $time, $event, $reason) {
 	);
 }
 
+// Returns the HTML table with the ranking's players sorted in decreasing order
+// in total points.
 function indigo_plateau_ranking () {
 	$ranking = '';
 	
