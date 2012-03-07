@@ -100,14 +100,13 @@ function indigo_plateau_ranking () {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'indigo_plateau';
 	
-	$i = 0;
 	$players = array();
-	$row;
+	$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, event, reason, points FROM $table_name") );
 	
-	while (($row = $wpdb->get_row("SELECT name, event, reason, points FROM $table_name", $i)) != NULL) {
-		$players[$row->name] += $row->points;
-		
-		$i++;
+	foreach ($rows as $row) {
+		if ( $row->name ) {
+			$players[$row->name] += $row->points;
+		}
 	}
 	
 	// Sort players in decreasing order of total points.

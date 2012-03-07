@@ -1,18 +1,18 @@
-<div class='wrap'>
+<div class="wrap">
 	<h2>Indigo Plateau Input Menu</h2>
 	
-	<form method='post' action='<?php echo $_SERVER["REQUEST_URI"]; ?>'>
-		<label for='playerName'>Nome</label>
-			<input type='text' name='playerName' /><br />
+	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+		<label for="ip_playerName">Nome</label>
+			<input type="text" name="ip_playerName" /><br />
 		
-		<label for='eventDate'>Data (YYYY-MM-DD)</label>
-			<input type='text' name='eventDate' /><br />
+		<label for="ip_eventDate">Data (YYYY-MM-DD)</label>
+			<input type="text" name="ip_eventDate" /><br />
 		
-		<label for='eventName'>Evento</label>
-			<input type='text' name='eventName' /><br />
+		<label for="ip_eventName">Evento</label>
+			<input type="text" name="ip_eventName" /><br />
 			
-		<label for='reason'>Reason</label>
-			<select name="reason">
+		<label for="ip_reason">Reason</label>
+			<select name="ip_reason">
 				<option value="ganharTorneio">Ganhar um torneio - 15 pontos</option>
 				<option value="perderFinal">Perder na final de um torneio - 10 pontos</option>
 				<option value="perderQuartas">Perder nas quartas de final de um torneio - 5 pontos</option>
@@ -22,17 +22,23 @@
 				<option value="criarRegra">Criar uma regra aceita pela LOP-SP - 5 pontos</option>
 			</select><br />
 			
-		<p class='submit'>
-			<input type='submit' name='submit' value='Adicionar registro' />
+		<p class="submit">
+			<input type="submit" name="submit" value="Adicionar registro" />
 		</p>
 	</form>
 	
 	<?php
 	// Insert the new registry into DB.
+	$ind_plat_name = $_POST["ip_playerName"];
+	$ind_plat_time = $_POST["ip_eventDate"];
+	$ind_plat_event = $_POST["ip_eventName"];
+	$ind_plat_reason = $_POST["ip_reason"];
 	
-	echo 'derp';
+	if ($ind_plat_name) {
+		ip_insert_win( $ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason );			
+	}
 	?>
 	
-	<?php echo indigo_plateau_ranking(); ?>
+	<?php indigo_plateau_ranking(); ?>
 	
 </div>
