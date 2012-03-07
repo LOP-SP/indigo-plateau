@@ -47,8 +47,12 @@ function indigo_plateau_activate () {
 register_activation_hook( __FILE__, 'indigo_plateau_activate' );
 
 // Menu
+function indigo_plateau_admin () {
+	include_once 'indigo-plateau-admin.php';
+}
+
 function indigo_plateau_admin_actions () {
-	add_options_page(  );
+	add_options_page( 'Indigo Plateau', 'Indigo Plateau', 1, 'Indigo Plateau', 'indigo_plateau_admin' );
 }
 
 add_action( 'admin_menu', 'indigo_plateau_admin_actions' );
