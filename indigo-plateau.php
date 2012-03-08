@@ -122,6 +122,12 @@ function create_table ($players) {
 	return $ranking;
 }
 
+/**
+ * indigo_plateau_ranking
+ *
+ * @return void
+ * @author Carlos Agarie
+ **/
 // Returns the HTML table with the ranking's players sorted in decreasing order
 // in total points.
 function indigo_plateau_ranking () {
@@ -141,7 +147,5 @@ function indigo_plateau_ranking () {
 	// HTML table creation.
 	echo create_table($players);
 }
-
-
 
 ?>
