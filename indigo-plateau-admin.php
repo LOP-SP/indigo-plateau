@@ -2,6 +2,8 @@
 	<h2>Indigo Plateau Input Menu</h2>
 	
 	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+		<input type="hidden" name="ip_secret_stuff" value="asdf" />
+	
 		<label for="ip_playerName">Nome</label>
 			<input type="text" name="ip_playerName" /><br />
 		
@@ -34,8 +36,10 @@
 	$ind_plat_event = $_POST["ip_eventName"];
 	$ind_plat_reason = $_POST["ip_reason"];
 	
-	if ($ind_plat_name) {
-		ip_insert_win( $ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason );			
+	if (isset($_POST["ip_secret_stuff"])) {
+		ip_insert_win( $ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason );
+		
+		unset($_POST["ip_secret_stuff"]);
 	}
 	?>
 	
