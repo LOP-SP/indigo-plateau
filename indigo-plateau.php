@@ -3,7 +3,7 @@
 Plugin Name: Indigo Plateau
 Plugin URI: http://github.com/agarie/indigo-plateau
 Description: A ranking creation plugin used for championships.
-Version: 1.0
+Version: 0.1
 Author: Carlos Onox Agarie
 Author URI: http://onox.com.br
 License: GPL2
@@ -94,26 +94,15 @@ function ip_insert_win ($name, $time, $event, $reason) {
 	);
 }
 
-// Returns the HTML table with the ranking's players sorted in decreasing order
-// in total points.
-function indigo_plateau_ranking () {
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'indigo_plateau';
-	
-	$players = array();
-	$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, event, reason, points FROM $table_name") );
-	
-	foreach ($rows as $row) {
-		if ( $row->name ) {
-			$players[$row->name] += $row->points;
-		}
-	}
-	
-	// Sort players in decreasing order of total points.
-	arsort($players);
-
-	// HTML table creation.
+/**
+ * create_table
+ *
+ * @return string
+ * @author Carlos Agarie
+ **/
+function create_table ($players) {
 	$ranking = "";
+	
 	$ranking .= "<div id='tabela-ranking'><table>";
 	$ranking .= "<colgroup>";
 	$ranking .=	"<col class='coluna-jogadores' />";
@@ -129,8 +118,30 @@ function indigo_plateau_ranking () {
 	}
 	
 	$ranking .= "</table></div>";
-
-	echo $ranking;
+	
+	return $ranking;
 }
+
+// Returns the HTML table with the ranking's players sorted in decreasing order
+// in total points.
+function indigo_plateau_ranking () {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'indigo_plateau';
+	
+	$players = array();
+	$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, event, reason, points FROM $table_name") );
+	
+	foreach ($rows as $row) {
+		$players[$row->name] += $row->points;
+	}
+	
+	// Sort players in decreasing order of total points.
+	arsort($players);
+
+	// HTML table creation.
+	echo create_table($players);
+}
+
+
 
 ?>

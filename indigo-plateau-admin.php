@@ -44,5 +44,5 @@
 	?>
 	
 	<?php indigo_plateau_ranking(); ?>
-	
+
 </div>
