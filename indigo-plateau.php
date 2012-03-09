@@ -61,9 +61,9 @@ add_action( 'admin_menu', 'indigo_plateau_admin_actions' );
 global $reasons;
 $reasons = array(
 	"ganharTorneio" => 15,
-	"perderQuartas" => 10,
-	"defenderGinasio" => 5,
-	"trazerAmigo" => 15,
+	"perderFinal" => 10,
+	"perderQuartas" => 5,
+	"defenderGinasio" => 15,
 	"trazerAmigo" => 5,
 	"criarPost" => 5,
 	"criarRegra" => 5
