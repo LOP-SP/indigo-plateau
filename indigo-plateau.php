@@ -125,11 +125,12 @@ function create_table ($players) {
 /**
  * indigo_plateau_ranking
  *
+ * Returns the HTML table with the ranking's players sorted in decreasing order
+ * in total points.
+ *
  * @return void
  * @author Carlos Agarie
  **/
-// Returns the HTML table with the ranking's players sorted in decreasing order
-// in total points.
 function indigo_plateau_ranking () {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'indigo_plateau';
@@ -145,7 +146,9 @@ function indigo_plateau_ranking () {
 	arsort($players);
 
 	// HTML table creation.
-	echo create_table($players);
+	return create_table($players);
 }
+
+add_shortcode( 'indigo_plateau_ranking', 'indigo_plateau_ranking' );
 
 ?>

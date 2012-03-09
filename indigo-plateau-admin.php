@@ -43,6 +43,6 @@
 	}
 	?>
 	
-	<?php indigo_plateau_ranking(); ?>
+	<?php echo indigo_plateau_ranking(); ?>
 
 </div>
