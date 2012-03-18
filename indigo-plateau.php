@@ -37,7 +37,7 @@ function indigo_plateau_activate () {
 		  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		  event text DEFAULT '' NOT NULL,
 		  reason VARCHAR(255) NOT NULL,
-			points int NOT NULL,
+		  points int NOT NULL,
 		  UNIQUE KEY id (id)
 		);";
 	
@@ -60,20 +60,43 @@ add_action( 'admin_menu', 'indigo_plateau_admin_actions' );
 // Hash to store reasons.
 global $reasons;
 $reasons = array(
-	"ganharTorneio" => 15,
-	"perderFinal" => 10,
-	"perderQuartas" => 5,
-	"defenderGinasio" => 15,
-	"trazerAmigo" => 5,
-	"criarPost" => 5,
-	"criarRegra" => 5
+	"ganharTorneio" => array(15, 'Vencer um torneio'),
+	"perderFinal" => array(10, 'Perder na final de um torneio'),
+	"perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
+	"defenderGinasio" => array(10, 'Defender um ginásio'),
+	"trazerAmigo" => array(5, 'Trazer um amigo para participar da LOP-SP pela primeira vez'),
+	"criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
+	"criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
 );
+
+// Output a list of reasons.
+/**
+ * indigo_plateau_reasons
+ *
+ * @return string
+ * @author Carlos Agarie
+ **/
+function indigo_plateau_reasons () {
+	global $reasons;
+	$html = '';
+	
+	$html .= '<table>';
+	$html .= '<tr><th>Condição</th><th>Pontuação</th></tr>';
+	
+	foreach ($reasons as $value) {
+		$html .= '<tr><td>' . $value[1] . '</td><td>' . $value[0] . '</td></tr>';
+	}
+	
+	$html .= '</table>';
+	
+	return $html;
+}
 
 // Insert a new entry when a player receives points.
 function ip_insert_win ($name, $time, $event, $reason) {
 	global $wpdb, $reasons;
 	$table_name = $wpdb->prefix . 'indigo_plateau';
-	$points = $reasons[$reason];
+	$points = $reasons[$reason][0];
 	
 	$wpdb->insert(
 		$table_name,
@@ -94,13 +117,59 @@ function ip_insert_win ($name, $time, $event, $reason) {
 	);
 }
 
+// For future use...
+function ip_delete_win ($id) {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'indigo_plateau';
+	
+	$wpdb->query( "DELETE FROM $table_name WHERE id = $id" );
+}
+
+function create_partial_players ($rows) {
+	$players = array();
+
+	// Produce an array with player's name and total points
+	foreach ($rows as $row) {
+	$players[$row->name] += $row->points;
+}
+			
+	// Sort players in decreasing order of total points.
+	arsort($players);
+
+	return $players;
+}
+
+function create_complete_table ($rows) {
+	$ranking = "";
+
+	$ranking .= "<div id='tabela-ranking'><table>";
+	$ranking .= "<tr><th>ID</th>";
+	$ranking .= "<th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th>";
+	$ranking .= "<th>Evento</th><th>Reason</th><th>Time</th></tr>";
+
+	foreach ($rows as $row) {
+		$ranking .= "<tr>";
+		$ranking .= "<td>" . $row->id . "</td>";
+		$ranking .= "<td>" . $row->name . "</td>";
+		$ranking .= "<td>" . $row->points . "</td>";
+		$ranking .= "<td>" . $row->event . "</td>";
+		$ranking .= "<td>" . $row->reason . "</td>";
+		$ranking .= "<td>" . $row->time . "</td>";
+		$ranking .= "</tr>";
+	}
+
+	$ranking .= "</table></div>";
+
+	return $ranking;
+}
+
 /**
  * create_table
  *
  * @return string
  * @author Carlos Agarie
  **/
-function create_table ($players) {
+function create_partial_table ($players) {
 	$ranking = "";
 	
 	$ranking .= "<div id='tabela-ranking'><table>";
@@ -135,20 +204,24 @@ function indigo_plateau_ranking () {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'indigo_plateau';
 	
-	$players = array();
-	$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, event, reason, points FROM $table_name") );
-	
-	foreach ($rows as $row) {
-		$players[$row->name] += $row->points;
-	}
-	
-	// Sort players in decreasing order of total points.
-	arsort($players);
+	$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, points FROM $table_name") );
 
 	// HTML table creation.
-	return create_table($players);
+	return create_partial_table(create_partial_players($rows));
 }
 
+function indigo_plateau_complete () {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'indigo_plateau';
+	
+	$rows = $wpdb->get_results( $wpdb->prepare("SELECT id, name, event, reason, points, time FROM $table_name") );
+
+	// HTML table creation.
+	return create_complete_table($rows);
+}
+
+// Shortcodes used to display tables easily.
+add_shortcode( 'indigo_plateau_reasons', 'indigo_plateau_reasons' );
 add_shortcode( 'indigo_plateau_ranking', 'indigo_plateau_ranking' );
 
 ?>

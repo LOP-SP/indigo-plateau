@@ -8,33 +8,27 @@
 			<key>filename</key>
 			<string>.gitignore</string>
 			<key>lastUsed</key>
-			<date>2012-03-06T03:24:05Z</date>
+			<date>2012-03-07T20:39:28Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>indigo-plateau-admin.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-07T02:33:47Z</date>
+			<date>2012-03-13T02:32:53Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>indigo-plateau.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-07T02:33:46Z</date>
+			<date>2012-03-13T02:32:53Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>readme.txt</string>
 			<key>lastUsed</key>
-			<date>2012-03-05T19:32:00Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>view.html</string>
-			<key>lastUsed</key>
-			<date>2012-03-06T02:44:04Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2012-03-09T01:39:44Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
