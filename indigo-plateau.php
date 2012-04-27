@@ -80,7 +80,11 @@ function indigo_plateau_reasons () {
 	global $reasons;
 	$html = '';
 	
-	$html .= '<table>';
+	$html .= "<table id='tabela-ranking'>";
+	$html .= "<colgroup>";
+	$html .= "<col class='coluna-condicao' />";
+	$html .= "<col class='coluna-pts-equiv' />";
+	$html .= "</colgroup>";
 	$html .= '<tr><th>Condição</th><th>Pontuação</th></tr>';
 	
 	foreach ($reasons as $value) {
@@ -117,7 +121,7 @@ function ip_insert_win ($name, $time, $event, $reason) {
 	);
 }
 
-// For future use...
+// Used to erase a record from the database, in case of misclick or wrong info.
 function ip_delete_win ($id) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'indigo_plateau';

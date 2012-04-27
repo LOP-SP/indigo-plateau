@@ -62,8 +62,6 @@
 	}
 	?>
 	
-	<?php echo indigo_plateau_reasons(); ?>
-	
 	<?php echo indigo_plateau_complete(); ?>
 
 	<?php echo indigo_plateau_ranking(); ?>
