@@ -25,6 +25,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+// Class declaration
+if (!class_exists('IndigoPlateau')) {
+	class IndigoPlateau {
+		public function __construct() {
+			// Shortcodes used to display tables easily.
+			add_shortcode( 'indigo_plateau_reasons', array($this, 'indigo_plateau_reasons') );
+			add_shortcode( 'indigo_plateau_ranking', array($this, 'indigo_plateau_ranking') );
+		}
+	}	
+}
+
+// If everything's ok, initialize the class.
+if (class_exists('IndigoPlateau')) {
+	$indigo_plateau = new IndigoPlateauInit();
+}
+
 // Install function
 function indigo_plateau_activate () {
 	global $wpdb;
@@ -167,12 +183,6 @@ function create_complete_table ($rows) {
 	return $ranking;
 }
 
-/**
- * create_table
- *
- * @return string
- * @author Carlos Agarie
- **/
 function create_partial_table ($players) {
 	$ranking = "";
 	
@@ -195,15 +205,6 @@ function create_partial_table ($players) {
 	return $ranking;
 }
 
-/**
- * indigo_plateau_ranking
- *
- * Returns the HTML table with the ranking's players sorted in decreasing order
- * in total points.
- *
- * @return void
- * @author Carlos Agarie
- **/
 function indigo_plateau_ranking () {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'indigo_plateau';
@@ -223,9 +224,5 @@ function indigo_plateau_complete () {
 	// HTML table creation.
 	return create_complete_table($rows);
 }
-
-// Shortcodes used to display tables easily.
-add_shortcode( 'indigo_plateau_reasons', 'indigo_plateau_reasons' );
-add_shortcode( 'indigo_plateau_ranking', 'indigo_plateau_ranking' );
 
 ?>
