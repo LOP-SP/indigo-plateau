@@ -40,6 +40,12 @@ if (!class_exists('IndigoPlateau')) {
 		);
 		
 		public function __construct() {
+			// Shortcodes used to display tables easily.
+			add_shortcode( 'indigo_plateau_reasons', array($this, 'print_reasons') );
+			add_shortcode( 'indigo_plateau_ranking', array($this, 'print_ranking') );
+		}
+		
+		public function init () {
 			global $wpdb;
 
 			$table_name = $wpdb->prefix . 'indigo_plateau';
@@ -55,10 +61,6 @@ if (!class_exists('IndigoPlateau')) {
 				);";
 
 			$wpdb->query($sql);
-			
-			// Shortcodes used to display tables easily.
-			add_shortcode( 'indigo_plateau_reasons', array($this, 'print_reasons') );
-			add_shortcode( 'indigo_plateau_ranking', array($this, 'print_ranking') );
 		}
 
 		public function insert_entry ($name, $time, $event, $reason) {
@@ -193,14 +195,15 @@ if (!class_exists('IndigoPlateau')) {
 	}	
 }
 
-// If everything's ok, initialize the class.
-if (class_exists('IndigoPlateau')) {
-	$indigo_plateau = new IndigoPlateau();
-}
+$indigo_plateau = new IndigoPlateau();
 
-register_activation_hook( WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', 'indigo_plateau_activate' );
+// Called when the plugin is activated. 
+register_activation_hook( WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($indigo_plateau, 'init') );
 
-// Menu
+//
+// Menu stuff
+//
+
 function indigo_plateau_admin () {
 	include_once 'indigo-plateau-admin.php';
 }
