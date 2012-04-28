@@ -161,7 +161,7 @@ if (!class_exists('IndigoPlateau')) {
 			$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, points FROM $table_name") );
 
 			// HTML table creation.
-			return create_partial_table(create_partial_players($rows));
+			return $this->create_partial_table(create_partial_players($rows));
 		}
 
 		public function print_reasons () {
