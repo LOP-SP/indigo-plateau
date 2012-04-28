@@ -50,19 +50,19 @@
 	$ind_plat_id = $_POST["ip_id"];
 
 	if (isset($_POST["ip_input_secret_stuff"])) {
-		ip_insert_win( $ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason );
+		$indigo_plateau->insert_entry( $ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason );
 		
 		unset($_POST["ip_input_secret_stuff"]);
 	}
 
 	if (isset($_POST["ip_delete_secret_stuff"])) {
-		ip_delete_win( $ind_plat_id );
+		$indigo_plateau->delete_entry( $ind_plat_id );
 		
 		unset($_POST["ip_delete_secret_stuff"]);
 	}
 	?>
 	
-	<?php echo indigo_plateau_complete(); ?>
+	<?php echo $indigo_plateau->indigo_plateau_complete(); ?>
 
-	<?php echo indigo_plateau_ranking(); ?>
+	<?php echo $indigo_plateau->indigo_plateau_ranking(); ?>
 </div>
