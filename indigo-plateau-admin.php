@@ -41,31 +41,40 @@
 	</form>
 	
 	<?php
-	// Insert the new registry into DB.
+	//
+	// Get the variables needed for a new entry or deletion of one.
+	//
+	
+	// Addition of an entry.
 	$ind_plat_name = $_POST["ip_playerName"];
 	$ind_plat_time = $_POST["ip_eventDate"];
 	$ind_plat_event = $_POST["ip_eventName"];
 	$ind_plat_reason = $_POST["ip_reason"];
 	
+	// Deletion of an entry.
 	$ind_plat_id = $_POST["ip_id"];
-
-
-	if (isset($_POST["ip_input_secret_stuff"])) {
+	
+	$indigo_plateau = new IndigoPlateau();
+	
+	//
+	// Checks for hidden variable to know which action to take
+	// then insert or delete an entry, accordingly.
+	//
+	if ( isset( $_POST["ip_input_secret_stuff"] ) ) {
 		$indigo_plateau->insert_entry( $ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason );
-		
 		unset($_POST["ip_input_secret_stuff"]);
 	}
 
-	if (isset($_POST["ip_delete_secret_stuff"])) {
+	if ( isset( $_POST["ip_delete_secret_stuff"] ) ) {
 		$indigo_plateau->delete_entry( $ind_plat_id );
-		
-		unset($_POST["ip_delete_secret_stuff"]);
+		unset( $_POST["ip_delete_secret_stuff"] );
 	}
+	
+	// Prints the information table's complete version...
+	echo $indigo_plateau->indigo_plateau_complete();
+
+	// ... and the simple version. This is the same output from the
+	// shortcode [indigo_plateau_ranking].
+	echo $indigo_plateau->print_ranking();
 	?>
-		
-	<?php //echo $indigo_plateau->indigo_plateau_complete(); ?>
-
-	<?php echo 'ashafuhsiudhfuhsad'; ?>
-
-	<?php echo $indigo_plateau->print_ranking(); ?>
 </div>
