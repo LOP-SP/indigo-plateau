@@ -28,6 +28,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // Class declaration
 if (!class_exists('IndigoPlateau')) {
 	class IndigoPlateau {
+		global $wpdb;
+		
+		define('TABLE_NAME', $wpdb->prefix . 'indigo_plateau')
+		
 		// Reasons array, used to calculate the points gained by the participants.
 		protected $reasons = array(
 								"ganharTorneio" => array(15, 'Vencer um torneio'),
@@ -38,7 +42,7 @@ if (!class_exists('IndigoPlateau')) {
 								"criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
 								"criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
 		);
-		
+				
 		public function __construct() {
 			// Shortcodes used to display tables easily.
 			add_shortcode( 'indigo_plateau_reasons', array($this, 'print_reasons') );
@@ -48,9 +52,7 @@ if (!class_exists('IndigoPlateau')) {
 		public function init () {
 			global $wpdb;
 
-			$table_name = $wpdb->prefix . 'indigo_plateau';
-
-			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+			$sql = "CREATE TABLE IF NOT EXISTS " . TABLE_NAME . "(
 				  id int NOT NULL AUTO_INCREMENT,
 				  name VARCHAR(255) NOT NULL,
 				  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
@@ -65,11 +67,10 @@ if (!class_exists('IndigoPlateau')) {
 
 		public function insert_entry ($name, $time, $event, $reason) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
 			$points = $this->reasons[$reason][0];
 
 			$wpdb->insert(
-				$table_name,
+				TABLE_NAME,
 				array(
 					'name' => $name,
 					'time' => $time,
@@ -89,9 +90,8 @@ if (!class_exists('IndigoPlateau')) {
 
 		public function delete_entry ($id) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
 
-			$wpdb->query( "DELETE FROM $table_name WHERE id = $id" );
+			$wpdb->query( "DELETE FROM " . TABLE_NAME . " WHERE id = $id" );
 		}
 
 		public function create_partial_players ($rows) {
@@ -108,60 +108,64 @@ if (!class_exists('IndigoPlateau')) {
 			return $players;
 		}
 
-		public function create_complete_table ($rows) {
-			$ranking = "";
-
-			$ranking .= "<div id='tabela-ranking'><table>";
-			$ranking .= "<tr><th>ID</th>";
-			$ranking .= "<th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th>";
-			$ranking .= "<th>Evento</th><th>Reason</th><th>Time</th></tr>";
-
-			foreach ($rows as $row) {
-				$ranking .= "<tr>";
-				$ranking .= "<td>" . $row->id . "</td>";
-				$ranking .= "<td>" . $row->name . "</td>";
-				$ranking .= "<td>" . $row->points . "</td>";
-				$ranking .= "<td>" . $row->event . "</td>";
-				$ranking .= "<td>" . $row->reason . "</td>";
-				$ranking .= "<td>" . $row->time . "</td>";
-				$ranking .= "</tr>";
+		public function create_table ($rows, $kind) {
+			// $rows is an object with the following properties:
+			// $row->id
+			// $row->name
+			// $row->points
+			// $row->event
+			// $row->reason
+			// $row->time
+			//
+			// $kind is a string which dictates the table layout.
+			$table = '';
+			
+			$table .= "<div id='tabela-table'><table>";
+			
+			if ($kind == 'complete') {
+				$table .= "<tr><th>ID</th>";
+				$table .= "<th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th>";
+				$table .= "<th>Evento</th><th>Reason</th><th>Time</th></tr>";
+			
+				foreach ($rows as $row) {
+					$table .= "<tr>";
+					$table .= "<td>" . $row->id . "</td>";
+					$table .= "<td>" . $row->name . "</td>";
+					$table .= "<td>" . $row->points . "</td>";
+					$table .= "<td>" . $row->event . "</td>";
+					$table .= "<td>" . $row->reason . "</td>";
+					$table .= "<td>" . $row->time . "</td>";
+					$table .= "</tr>";
+				}
 			}
+			else if ($kind == 'partial') {
+				$table .= "<colgroup>";
+				$table .=	"<col class='coluna-jogadores' />";
+				$table .= "<col class='coluna-pontos' />";
+				$table .= "</colgroup>";
+				$table .= "<tr><th>Jogadores</th>";
+				$table .= "<th>Pontua&ccedil;&atilde;o</th></tr>";
 
-			$ranking .= "</table></div>";
-
-			return $ranking;
-		}
-
-		public function create_partial_table ($players) {
-			$ranking = "";
-
-			$ranking .= "<div id='tabela-ranking'><table>";
-			$ranking .= "<colgroup>";
-			$ranking .=	"<col class='coluna-jogadores' />";
-			$ranking .= "<col class='coluna-pontos' />";
-			$ranking .= "</colgroup>";
-			$ranking .= "<tr><th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th></tr>";
-
-			foreach ($players as $name => $points) {
-				$ranking .= "<tr>";
-				$ranking .= "<td>" . $name . "</td>";
-				$ranking .= "<td>" . $points . "</td>";
-				$ranking .= "</tr>";
+				foreach ($rows as $row) {
+					$table .= "<tr>";
+					$table .= "<td>" . $row->name . "</td>";
+					$table .= "<td>" . $row->points . "</td>";
+					$table .= "</tr>";
+				}
 			}
-
-			$ranking .= "</table></div>";
-
-			return $ranking;
+			
+			$table .= "</table></div>";
+			
+			return $table;
 		}
 
 		public function print_ranking () {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
 
-			$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, points FROM $table_name") );
+			$rows = $wpdb->get_results( $wpdb->prepare( "SELECT name, points FROM " . TABLE_NAME ) );
 
 			// HTML table creation.
-			return $this->create_partial_table($this->create_partial_players($rows));
+			return $this->create_table($this->create_partial_players($rows), 'partial');
 		}
 
 		public function print_reasons () {
@@ -185,12 +189,11 @@ if (!class_exists('IndigoPlateau')) {
 
 		public function indigo_plateau_complete () {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
 
-			$rows = $wpdb->get_results( $wpdb->prepare("SELECT id, name, event, reason, points, time FROM $table_name") );
+			$rows = $wpdb->get_results( $wpdb->prepare("SELECT id, name, event, reason, points, time FROM" . TABLE_NAME) );
 
 			// HTML table creation.
-			return $this->create_complete_table($rows);
+			return $this->create_table($rows, 'complete');
 		}
 	}	
 }
