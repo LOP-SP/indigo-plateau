@@ -70,11 +70,9 @@
 		unset( $_POST["ip_delete_secret_stuff"] );
 	}
 	
-	// Prints the information table's complete version...
-	echo $indigo_plateau->indigo_plateau_complete();
-
-	// ... and the simple version. This is the same output from the
-	// shortcode [indigo_plateau_ranking].
+	// This is the same output from the shortcode [indigo_plateau_ranking].
 	echo $indigo_plateau->print_ranking();
+
+	echo $indigo_plateau->print_reasons();
 	?>
 </div>

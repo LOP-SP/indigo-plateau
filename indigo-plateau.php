@@ -8,7 +8,6 @@ Author: Carlos Onox Agarie
 Author URI: http://onox.com.br
 License: GPL2
 
-
 Copyright 2012  Carlos Agarie  (carlos.agarie@gmail.com)
 
 This program is free software; you can redistribute it and/or modify
@@ -41,8 +40,8 @@ if (!class_exists('IndigoPlateau')) {
 		
 		public function __construct() {
 			// Shortcodes used to display tables easily.
-			add_shortcode( 'indigo_plateau_reasons', array($this, 'print_reasons') );
-			add_shortcode( 'indigo_plateau_ranking', array($this, 'print_ranking') );
+			add_shortcode('indigo_plateau_reasons', array($this, 'print_reasons'));
+			add_shortcode('indigo_plateau_ranking', array($this, 'print_ranking'));
 		}
 		
 		public function init () {
@@ -63,6 +62,7 @@ if (!class_exists('IndigoPlateau')) {
 			$wpdb->query($sql);
 		}
 
+		// CRUD operations.
 		public function insert_entry ($name, $time, $event, $reason) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'indigo_plateau';
@@ -89,81 +89,40 @@ if (!class_exists('IndigoPlateau')) {
 
 		public function delete_entry ($id) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
+			$table_name = $wpdb->prefix . "indigo_plateau";
 
-			$wpdb->query( "DELETE FROM $table_name WHERE id = $id" );
+			$wpdb->query("DELETE FROM $table_name WHERE id = $id");
 		}
 
-		public function create_partial_players ($rows) {
-			$players = array();
+		// public function merge_entries($first_id, $second_id) {
 
-			// Produce an array with player's name and total points
+		// }
+
+		// $rows is an array of rows from the database.
+		// Returns a JSON string representing all the players.
+		public function jsonify_players($rows) {
+			$players = array();
+			$total_points = array();
+
+			// Produce an array with a player's name, total points and history
+			// of points.
 			foreach ($rows as $row) {
-				$players[$row->name] += $row->points;
+				$total_points += $row->points;
 			}
 
-			// Sort players in decreasing order of total points.
-			arsort($players);
+			foreach ($rows as $row) {
+				$players[$row->name] = array("total" => $total_points[$row->name],
+											 "history" => array("time" => $row->time,
+																"event" => $row->event,
+																"reason" => $row->reason,
+																"points" => $row->points));
+			}
 
+			// TODO: use the to_json() function on this array.
 			return $players;
 		}
 
-		public function create_complete_table ($rows) {
-			$ranking = "";
-
-			$ranking .= "<div id='tabela-ranking'><table>";
-			$ranking .= "<tr><th>ID</th>";
-			$ranking .= "<th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th>";
-			$ranking .= "<th>Evento</th><th>Reason</th><th>Time</th></tr>";
-
-			foreach ($rows as $row) {
-				$ranking .= "<tr>";
-				$ranking .= "<td>" . $row->id . "</td>";
-				$ranking .= "<td>" . $row->name . "</td>";
-				$ranking .= "<td>" . $row->points . "</td>";
-				$ranking .= "<td>" . $row->event . "</td>";
-				$ranking .= "<td>" . $row->reason . "</td>";
-				$ranking .= "<td>" . $row->time . "</td>";
-				$ranking .= "</tr>";
-			}
-
-			$ranking .= "</table></div>";
-
-			return $ranking;
-		}
-
-		public function create_partial_table ($players) {
-			$ranking = "";
-
-			$ranking .= "<div id='tabela-ranking'><table>";
-			$ranking .= "<colgroup>";
-			$ranking .=	"<col class='coluna-jogadores' />";
-			$ranking .= "<col class='coluna-pontos' />";
-			$ranking .= "</colgroup>";
-			$ranking .= "<tr><th>Jogadores</th><th>Pontua&ccedil;&atilde;o</th></tr>";
-
-			foreach ($players as $name => $points) {
-				$ranking .= "<tr>";
-				$ranking .= "<td>" . $name . "</td>";
-				$ranking .= "<td>" . $points . "</td>";
-				$ranking .= "</tr>";
-			}
-
-			$ranking .= "</table></div>";
-
-			return $ranking;
-		}
-
-		public function print_ranking () {
-			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
-
-			$rows = $wpdb->get_results( $wpdb->prepare("SELECT name, points FROM $table_name") );
-
-			// HTML table creation.
-			return $this->create_partial_table($this->create_partial_players($rows));
-		}
-
+		// Returns a table with all the reasons.
 		public function print_reasons () {
 			$html = '';
 
@@ -183,14 +142,8 @@ if (!class_exists('IndigoPlateau')) {
 			return $html;
 		}
 
-		public function indigo_plateau_complete () {
-			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
-
-			$rows = $wpdb->get_results( $wpdb->prepare("SELECT id, name, event, reason, points, time FROM $table_name") );
-
-			// HTML table creation.
-			return $this->create_complete_table($rows);
+		// Returns a table of players to be populated with JavaScript.
+		public function print_ranking () {
 		}
 	}	
 }
