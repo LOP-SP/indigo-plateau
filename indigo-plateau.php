@@ -110,7 +110,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
                 //         'name'))
             }
 
-    		// public function merge_players($first, $second, $final_name) {}
+            // Update two players' names according to the final_name given.
+            //
+            // If $final_name is blank, update $first to $second.
+            // If $final_name is blank and both $first and $second are equal,
+            // do nothing.
+            // Else, both $first and $second are changed to $final_name.
+    		public function merge_players($first, $second, $final_name = "") {
+                if ($final_name == "") {
+                    // Update the first name to the second.
+                } else {
+                    if ($first == $final_name) {
+                        // Update only the second player.
+                    } elseif ($second == $final_name) {
+                        // Update only the first player.
+                    } else {
+                        // Update both.
+                    }
+                }
+            }
+
+            //
+            // Functions that process the data from the database and send it
+            // to the interface. 
+            //
 
     		// $rows is an array of rows from the database.
     		// Returns a JSON string representing all the players.
