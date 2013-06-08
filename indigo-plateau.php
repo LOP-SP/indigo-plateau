@@ -37,6 +37,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     								"criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
     								"criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
     		);
+
+            // public function table_name() {
+            //     global $wpdb;
+            //     return $wpdb->prefix . "indigo_plateau";
+            // }
     		
             public function __construct() {
     			// Shortcodes used to display tables easily.
@@ -144,11 +149,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     			// Produce an array with a player's name, total points and history
     			// of points.
     			foreach ($rows as $row) {
-    				$total_points += $row->points;
+    				$total_points[$row->name] += $row->points;
     			}
 
-    			foreach ($rows as $row) {
-    				$players[$row->name] = array("total" => $total_points[$row->name],
+                foreach ($rows as $row) {
+                    // Create a Player class to store everything and enable to_json.
+                    $players[$row->name] = array("total" => $total_points[$row->name],
     											 "history" => array("time" => $row->time,
     																"event" => $row->event,
     																"reason" => $row->reason,
@@ -156,7 +162,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     			}
 
     			// TODO: use the to_json() function on this array.
-    			return $players;
+    			return to_json($players);
+                // return "DJODJOJS";
     		}
 
     		// Returns a table with all the reasons.
@@ -186,7 +193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
                 $rows = $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time FROM $table_name"));
 
-                return jsonify_players($rows);
+                return $this->jsonify_players($rows);
     		}
     	}	
     }
