@@ -24,147 +24,166 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// Class declaration
-if (!class_exists('IndigoPlateau')) {
-	class IndigoPlateau {
-		// Reasons array, used to calculate the points gained by the participants.
-		protected $reasons = array(
-								"ganharTorneio" => array(15, 'Vencer um torneio'),
-								"perderFinal" => array(10, 'Perder na final de um torneio'),
-								"perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
-								"defenderGinasio" => array(10, 'Defender um ginásio'),
-								"trazerAmigo" => array(5, 'Trazer um amigo para participar da LOP-SP pela primeira vez'),
-								"criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
-								"criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
-		);
-		
-		public function __construct() {
-			// Shortcodes used to display tables easily.
-			add_shortcode('indigo_plateau_reasons', array($this, 'print_reasons'));
-			add_shortcode('indigo_plateau_ranking', array($this, 'print_ranking'));
-		}
-		
-		public function init () {
-			global $wpdb;
+    // Class declaration
+    if (!class_exists('IndigoPlateau')) {
+    	class IndigoPlateau {
+    		// Reasons array, used to calculate the points gained by the participants.
+    		protected $reasons = array(
+    								"ganharTorneio" => array(15, 'Vencer um torneio'),
+    								"perderFinal" => array(10, 'Perder na final de um torneio'),
+    								"perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
+    								"defenderGinasio" => array(10, 'Defender um ginásio'),
+    								"trazerAmigo" => array(5, 'Trazer um amigo para participar da LOP-SP pela primeira vez'),
+    								"criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
+    								"criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
+    		);
+    		
+            public function __construct() {
+    			// Shortcodes used to display tables easily.
+    			add_shortcode('indigo_plateau_reasons', array($this, 'print_reasons'));
+    			add_shortcode('indigo_plateau_ranking', array($this, 'print_ranking'));
+    		}
+    		
+            // Create a table indigo_plateau with WP's prefix.
+    		public function init() {
+    			global $wpdb;
 
-			$table_name = $wpdb->prefix . 'indigo_plateau';
+    			$table_name = $wpdb->prefix . 'indigo_plateau';
 
-			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
-				  id int NOT NULL AUTO_INCREMENT,
-				  name VARCHAR(255) NOT NULL,
-				  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-				  event text DEFAULT '' NOT NULL,
-				  reason VARCHAR(255) NOT NULL,
-				  points int NOT NULL,
-				  UNIQUE KEY id (id)
-				);";
+    			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+                            id int NOT NULL AUTO_INCREMENT,
+                            name VARCHAR(255) NOT NULL,
+                            time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                            event text DEFAULT '' NOT NULL,
+                            reason VARCHAR(255) NOT NULL,
+                            points int NOT NULL,
+                            UNIQUE KEY id (id)
+    				);";
 
-			$wpdb->query($sql);
-		}
+    			$wpdb->query($sql);
+    		}
 
-		// CRUD operations.
-		public function insert_entry ($name, $time, $event, $reason) {
-			global $wpdb;
-			$table_name = $wpdb->prefix . 'indigo_plateau';
-			$points = $this->reasons[$reason][0];
+            //
+    		// CRUD operations.
+            //
 
-			$wpdb->insert(
-				$table_name,
-				array(
-					'name' => $name,
-					'time' => $time,
-					'event' => $event,
-					'reason' => $reason,
-					'points' => $points
-				),
-				array(
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%d'
-				)
-			);
-		}
+    		public function insert_entry($name, $time, $event, $reason) {
+    			global $wpdb;
+    			$table_name = $wpdb->prefix . 'indigo_plateau';
+    			$points = $this->reasons[$reason][0];
 
-		public function delete_entry ($id) {
-			global $wpdb;
-			$table_name = $wpdb->prefix . "indigo_plateau";
+    			$wpdb->insert(
+    				$table_name,
+    				array(
+    					'name' => $name,
+    					'time' => $time,
+    					'event' => $event,
+    					'reason' => $reason,
+    					'points' => $points
+    				),
+    				array(
+    					'%s',
+    					'%s',
+    					'%s',
+    					'%s',
+    					'%d'
+    				)
+    			);
+    		}
 
-			$wpdb->query("DELETE FROM $table_name WHERE id = $id");
-		}
+    		public function delete_entry($id) {
+    			global $wpdb;
+    			$table_name = $wpdb->prefix . "indigo_plateau";
 
-		// public function merge_entries($first_id, $second_id) {
+    			$wpdb->query("DELETE FROM $table_name WHERE id = $id");
+    		}
 
-		// }
+            public function edit_entry($id, $name, $time, $event, $reason, $points) {
+                global $wpdb;
+                $table_name = $wpdb->prefix . "indigo_plateau";
 
-		// $rows is an array of rows from the database.
-		// Returns a JSON string representing all the players.
-		public function jsonify_players($rows) {
-			$players = array();
-			$total_points = array();
+                // Update the entry with $id.
 
-			// Produce an array with a player's name, total points and history
-			// of points.
-			foreach ($rows as $row) {
-				$total_points += $row->points;
-			}
+                // $wpdb->update(
+                //     $table_name,
+                //     array(
+                //         'name'))
+            }
 
-			foreach ($rows as $row) {
-				$players[$row->name] = array("total" => $total_points[$row->name],
-											 "history" => array("time" => $row->time,
-																"event" => $row->event,
-																"reason" => $row->reason,
-																"points" => $row->points));
-			}
+    		// public function merge_players($first, $second, $final_name) {}
 
-			// TODO: use the to_json() function on this array.
-			return $players;
-		}
+    		// $rows is an array of rows from the database.
+    		// Returns a JSON string representing all the players.
+    		public function jsonify_players($rows) {
+    			$players = array();
+    			$total_points = array();
 
-		// Returns a table with all the reasons.
-		public function print_reasons () {
-			$html = '';
+    			// Produce an array with a player's name, total points and history
+    			// of points.
+    			foreach ($rows as $row) {
+    				$total_points += $row->points;
+    			}
 
-			$html .= "<table id='tabela-ranking'>";
-			$html .= "<colgroup>";
-			$html .= "<col class='coluna-condicao' />";
-			$html .= "<col class='coluna-pts-equiv' />";
-			$html .= "</colgroup>";
-			$html .= '<tr><th>Condição</th><th>Pontuação</th></tr>';
+    			foreach ($rows as $row) {
+    				$players[$row->name] = array("total" => $total_points[$row->name],
+    											 "history" => array("time" => $row->time,
+    																"event" => $row->event,
+    																"reason" => $row->reason,
+    																"points" => $row->points));
+    			}
 
-			foreach ($this->reasons as $value) {
-				$html .= '<tr><td>' . $value[1] . '</td><td>' . $value[0] . '</td></tr>';
-			}
+    			// TODO: use the to_json() function on this array.
+    			return $players;
+    		}
 
-			$html .= '</table>';
+    		// Returns a table with all the reasons.
+    		public function print_reasons() {
+    			$html = '';
 
-			return $html;
-		}
+    			$html .= "<table id='tabela-ranking'>";
+    			$html .= "<colgroup>";
+    			$html .= "<col class='coluna-condicao' />";
+    			$html .= "<col class='coluna-pts-equiv' />";
+    			$html .= "</colgroup>";
+    			$html .= '<tr><th>Condição</th><th>Pontuação</th></tr>';
 
-		// Returns a table of players to be populated with JavaScript.
-		public function print_ranking () {
-		}
-	}	
-}
+    			foreach ($this->reasons as $value) {
+    				$html .= '<tr><td>' . $value[1] . '</td><td>' . $value[0] . '</td></tr>';
+    			}
 
-$indigo_plateau = new IndigoPlateau();
+    			$html .= '</table>';
 
-// Called when the plugin is activated. 
-register_activation_hook( WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($indigo_plateau, 'init') );
+    			return $html;
+    		}
 
-//
-// Menu stuff
-//
+            // Returns a table of players to be populated with JavaScript.
+        	public function print_ranking() {
+                global $wpdb;
+                $table_name = $wpdb->prefix . 'indigo_plateau';
 
-function indigo_plateau_admin () {
-	include_once 'indigo-plateau-admin.php';
-}
+                $rows = $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time FROM $table_name"));
 
-function indigo_plateau_admin_actions () {
-	add_options_page( 'Indigo Plateau', 'Indigo Plateau', 10, basename(__FILE__), 'indigo_plateau_admin' );
-}
+                return jsonify_players($rows);
+    		}
+    	}	
+    }
 
-add_action( 'admin_menu', 'indigo_plateau_admin_actions' );
+    $indigo_plateau = new IndigoPlateau();
 
+    // Called when the plugin is activated. 
+    register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($indigo_plateau, 'init'));
+
+    //
+    // Menu stuff
+    //
+
+    function indigo_plateau_admin() {
+    	include_once 'indigo-plateau-admin.php';
+    }
+
+    function indigo_plateau_admin_actions() {
+    	add_options_page('Indigo Plateau', 'Indigo Plateau', 10, basename(__FILE__), 'indigo_plateau_admin');
+    }
+
+    add_action('admin_menu', 'indigo_plateau_admin_actions');
 ?>
