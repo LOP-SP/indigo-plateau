@@ -144,28 +144,29 @@ if (!class_exists('IndigoPlateau')) {
             // $rows is an array of rows from the database.
             // Returns a JSON string representing all the players.
             public function jsonify_players($rows) {
-              $players = array();
-              $total_points = array();
+                $players = array();
 
-              // Produce an array with a player's name, total points and history
-              // of points.
-              foreach ($rows as $row) {
-                  $total_points[$row->name] += $row->points;
-              }
+                // Produce an array with a player's name, total points and history
+                // of points.
+                foreach ($rows as $row) {
+                    $players[$row->name] = array();
+                    $players[$row->name]["total"] = 0;
+                    $players[$row->name]["history"] = array();
+                }
 
-              foreach ($rows as $row) {
-                  // Create a Player class to store everything and enable to_json.
-                  $players[$row->name] = array("total" => $total_points[$row->name],
-                                               "history" => array("time" => $row->time,
-                                                                  "event" => $row->event,
-                                                                  "reason" => $row->reason,
-                                                                  "points" => $row->points));
-              }
+                foreach ($rows as $row) {
+                    // Must concatenate the arrays of 'history'
+                    $players[$row->name]["total"] += $row->points;
+                    array_push($players[$row->name]["history"], array("time" => $row->time,
+                                                                      "event" => $row->event,
+                                                                      "reason" => $row->reason,
+                                                                      "points" => $row->points));
+                }
 
                 return json_encode($players);
             }
 
-            // Returns a table with all the reasons.
+            // Returns a HTML table with all Indigo Plateau's reasons.
             public function print_reasons() {
                 $html = '';
 

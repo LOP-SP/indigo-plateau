@@ -72,5 +72,9 @@
 		
 		// This is the same output from the shortcode [indigo_plateau_ranking].
 		echo $indigo_plateau->print_ranking();
+
+		// Just to make sure how the table will be rendered. Same as
+		// [indigo_plateau_reasons].
+		echo $indigo_plateau->print_reasons();
 	?>
 </div>
