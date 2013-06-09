@@ -137,6 +137,16 @@ if (!class_exists('IndigoPlateau')) {
             }
 
             //
+            // Helpers.
+            //
+
+            public function get_rows() {
+                global $wpdb;
+                $table_name = $wpdb->prefix . 'indigo_plateau';
+                return $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time FROM $table_name"));
+            }
+
+            //
             // Functions that process the data from the database and send it
             // to the interface.
             //
@@ -188,12 +198,7 @@ if (!class_exists('IndigoPlateau')) {
 
             // Returns a table of players to be populated with JavaScript.
             public function print_ranking() {
-                global $wpdb;
-                $table_name = $wpdb->prefix . 'indigo_plateau';
-
-                $rows = $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time FROM $table_name"));
-
-                return $this->jsonify_players($rows);
+                return $this->jsonify_players($this->get_rows());
             }
         }
     }
