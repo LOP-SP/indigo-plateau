@@ -38,11 +38,6 @@ class IndigoPlateau {
         "criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
     );
 
-    // public function table_name() {
-    //     global $wpdb;
-    //     return $wpdb->prefix . "indigo_plateau";
-    // }
-
     public function __construct() {
         // Shortcodes used to display tables easily.
         add_shortcode('indigo_plateau_reasons', array($this, 'print_reasons'));
@@ -174,6 +169,10 @@ class IndigoPlateau {
 
         return json_encode($players);
     }
+
+    //
+    // Printing functions.
+    //
 
     // Returns a HTML table with all Indigo Plateau's reasons.
     public function print_reasons() {
