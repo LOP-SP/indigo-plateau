@@ -24,49 +24,49 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-    // Class declaration
-    if (!class_exists('IndigoPlateau')) {
-        class IndigoPlateau {
-            // Reasons array, used to calculate the points gained by the
-            // participants.
-            protected $reasons = array(
-                "ganharTorneio" => array(15, 'Vencer um torneio'),
-                "perderFinal" => array(10, 'Perder na final de um torneio'),
-                "perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
-                "defenderGinasio" => array(10, 'Defender um ginásio'),
-                "trazerAmigo" => array(5, 'Trazer um amigo para participar da LOP-SP pela primeira vez'),
-                "criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
-                "criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
-            );
+// Class declaration
+if (!class_exists('IndigoPlateau')) {
+    class IndigoPlateau {
+        // Reasons array, used to calculate the points gained by the
+        // participants.
+        protected $reasons = array(
+            "ganharTorneio" => array(15, 'Vencer um torneio'),
+            "perderFinal" => array(10, 'Perder na final de um torneio'),
+            "perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
+            "defenderGinasio" => array(10, 'Defender um ginásio'),
+            "trazerAmigo" => array(5, 'Trazer um amigo para participar da LOP-SP pela primeira vez'),
+            "criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
+            "criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
+        );
 
-            // public function table_name() {
-            //     global $wpdb;
-            //     return $wpdb->prefix . "indigo_plateau";
-            // }
+        // public function table_name() {
+        //     global $wpdb;
+        //     return $wpdb->prefix . "indigo_plateau";
+        // }
 
-            public function __construct() {
+        public function __construct() {
             // Shortcodes used to display tables easily.
             add_shortcode('indigo_plateau_reasons', array($this, 'print_reasons'));
             add_shortcode('indigo_plateau_ranking', array($this, 'print_ranking'));
-            }
+        }
 
-            // Create a table indigo_plateau with WP's prefix.
-            public function init() {
-                global $wpdb;
+        // Create a table indigo_plateau with WP's prefix.
+        public function init() {
+            global $wpdb;
 
-                $table_name = $wpdb->prefix . 'indigo_plateau';
+            $table_name = $wpdb->prefix . 'indigo_plateau';
 
-                $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-                            id int NOT NULL AUTO_INCREMENT,
-                            name VARCHAR(255) NOT NULL,
-                            time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                            event text DEFAULT '' NOT NULL,
-                            reason VARCHAR(255) NOT NULL,
-                            points int NOT NULL,
-                            UNIQUE KEY id (id)
-                          );";
+            $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+                        id int NOT NULL AUTO_INCREMENT,
+                        name VARCHAR(255) NOT NULL,
+                        time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                        event text DEFAULT '' NOT NULL,
+                        reason VARCHAR(255) NOT NULL,
+                        points int NOT NULL,
+                        UNIQUE KEY id (id)
+                      );";
 
-          $wpdb->query($sql);
+            $wpdb->query($sql);
         }
 
         //
@@ -197,22 +197,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
         }
     }
 
-    $indigo_plateau = new IndigoPlateau();
+$indigo_plateau = new IndigoPlateau();
 
-    // Called when the plugin is activated.
-    register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($indigo_plateau, 'init'));
+// Called when the plugin is activated.
+register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($indigo_plateau, 'init'));
 
-    //
-    // Menu stuff
-    //
+//
+// Menu stuff
+//
 
-    function indigo_plateau_admin() {
-        include_once 'indigo-plateau-admin.php';
-    }
+function indigo_plateau_admin() {
+    include_once 'indigo-plateau-admin.php';
+}
 
-    function indigo_plateau_admin_actions() {
-        add_options_page('Indigo Plateau', 'Indigo Plateau', 10, basename(__FILE__), 'indigo_plateau_admin');
-    }
+function indigo_plateau_admin_actions() {
+    add_options_page('Indigo Plateau', 'Indigo Plateau', 10, basename(__FILE__), 'indigo_plateau_admin');
+}
 
-    add_action('admin_menu', 'indigo_plateau_admin_actions');
+add_action('admin_menu', 'indigo_plateau_admin_actions');
 ?>
