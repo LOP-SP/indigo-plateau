@@ -4,10 +4,12 @@ TO DO LIST
 - Leave the IndigoPlateau class in its own file (fuck PHP)
 
 - Refactor the admin panel's code: urrghhhhhhhh
-  
+
 - Use JavaScript to create the tables from a player's JSON file
 -- [indigo_plateau_ranking] creates the HTML to be manipulated by JS
 -- After page load, fetches the JSON and processes it
+-- Maybe create a json.php file and call it from JS
+-- Dead simple solution: create the JSON and add it as a variable inside a <script> tag
 -- How the fuck to load JS/CSS from the plugin?
 
 - Use jQuery's UI datepicker, autocomplete and accordion:

@@ -196,7 +196,11 @@ class IndigoPlateau {
 
     // Returns a table of players to be populated with JavaScript.
     public function print_ranking() {
-        return $this->jsonify_players($this->get_rows());
+    }
+
+    public function return_json() {
+        header("Content-Type: application/json");
+        echo $this->jsonify_players($this->get_rows());
     }
 }
 
