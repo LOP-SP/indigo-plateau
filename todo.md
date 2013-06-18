@@ -12,6 +12,9 @@ TO DO LIST
 -- Dead simple solution: create the JSON and add it as a variable inside a <script> tag
 -- How the fuck to load JS/CSS from the plugin?
 
+http://www.sutanaryan.com/wordpress/how-to-include-jquery-and-css-in-wordpress-the-wordpress-way/
+http://planetozh.com/blog/2008/04/how-to-load-javascript-with-your-wordpress-plugin/
+
 - Use jQuery's UI datepicker, autocomplete and accordion:
 -- datepicker for easier input of event dates
 -- autocomplete for players's names and events

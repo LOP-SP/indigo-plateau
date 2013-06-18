@@ -67,6 +67,7 @@ class IndigoPlateau {
     // CRUD operations.
     //
 
+    // These methods should be part of an Entry (with a better name) class.
     public function insert_entry($name, $time, $event, $reason) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'indigo_plateau';
