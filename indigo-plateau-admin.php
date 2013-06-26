@@ -8,7 +8,7 @@
 			<input type="text" name="ip_playerName" /><br />
 		
 		<label for="ip_eventDate">Data (YYYY-MM-DD)</label>
-			<input type="text" name="ip_eventDate" /><br />
+			<input type="text" name="ip_eventDate" id="datepicker" /><br />
 		
 		<label for="ip_eventName">Evento</label>
 			<input type="text" name="ip_eventName" /><br />
@@ -75,6 +75,13 @@
 
 		// Just to make sure how the table will be rendered. Same as
 		// [indigo_plateau_reasons].
-		echo $indigo_plateau->print_reasons();
+		//echo $indigo_plateau->print_reasons();
 	?>
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery("#datepicker").datepicker({ dateFormat: "yy-mm-dd" });
+		jQuery("#accordion").accordion({ header: "h3", active: false, collapsible: true });
+	});
+</script>
 </div>

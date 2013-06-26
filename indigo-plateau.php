@@ -148,7 +148,7 @@ class IndigoPlateau {
 
     // $rows is an array of rows from the database.
     // Returns a JSON string representing all the players.
-    public function jsonify_players($rows) {
+    public function create_players($rows) {
         $players = array();
 
         // Produce an array with a player's name, total points and history
@@ -168,7 +168,7 @@ class IndigoPlateau {
                                                               "points" => $row->points));
         }
 
-        return json_encode($players);
+        return $players;
     }
 
     //
@@ -195,8 +195,28 @@ class IndigoPlateau {
         return $html;
     }
 
-    // Returns a table of players to be populated with JavaScript.
+    // Returns a table of players.
     public function print_ranking() {
+	// Create a HTML table with jQuery UI's accordion markup.
+	$players = $this->create_players($this->get_rows());
+	$html = '';
+
+	$html .= "<div id='accordion'>";
+	
+	foreach ($players as $name => $attrs) {
+		$html .= "<h3>" . $name  . "</h3>";
+		$html .= "<ul>";
+
+		foreach ($attrs["history"] as $line) {
+			$html .= "<li>" . $line["event"] . "</li>";
+		}
+
+		$html .= "</ul>";
+	}
+
+	$html .= "</div>";
+
+	return $html;
     }
 
     public function return_json() {
@@ -223,4 +243,9 @@ function indigo_plateau_admin_actions() {
 }
 
 add_action('admin_menu', 'indigo_plateau_admin_actions');
+
+// Yay jQuery!!!
+wp_enqueue_script('jquery-ui-datepicker');
+wp_enqueue_script('jquery-ui-accordion');
+wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 ?>
