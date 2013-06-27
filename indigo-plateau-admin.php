@@ -1,18 +1,18 @@
 <div class="wrap">
 	<h2>Indigo Plateau Input Menu</h2>
-	
+
 	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
 		<input type="hidden" name="ip_input_secret_stuff" value="asdf" />
-	
+
 		<label for="ip_playerName">Nome</label>
-			<input type="text" name="ip_playerName" /><br />
-		
+			<input type="text" name="ip_playerName" class="ip-insert-name" /><br />
+
 		<label for="ip_eventDate">Data (YYYY-MM-DD)</label>
-			<input type="text" name="ip_eventDate" id="datepicker" /><br />
-		
+			<input type="text" name="ip_eventDate" class="ip-datepicker" /><br />
+
 		<label for="ip_eventName">Evento</label>
-			<input type="text" name="ip_eventName" /><br />
-			
+			<input type="text" name="ip_eventName" class="ip-insert-event" /><br />
+
 		<label for="ip_reason">Reason</label>
 			<select name="ip_reason">
 				<option value="ganharTorneio">Ganhar um torneio - 15 pontos</option>
@@ -23,7 +23,7 @@
 				<option value="criarPost">Criar um post para o site da LOP-SP - 5 pontos</option>
 				<option value="criarRegra">Criar uma regra aceita pela LOP-SP - 5 pontos</option>
 			</select><br />
-			
+
 		<p class="submit">
 			<input type="submit" name="submit" value="Adicionar registro" />
 		</p>
@@ -31,7 +31,7 @@
 
 	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
 		<input type="hidden" name="ip_delete_secret_stuff" value="asdf" />
-	
+
 		<label for="ip_id">ID</label>
 			<input type="text" name="ip_id" /><br />
 
@@ -39,23 +39,23 @@
 			<input type="submit" name="submit" value="Apagar registro" />
 		</p>
 	</form>
-	
+
 	<?php
 		//
 		// Get the variables needed for a new entry or deletion of one.
 		//
-		
+
 		// Addition of an entry.
 		$ind_plat_name = $_POST["ip_playerName"];
 		$ind_plat_time = $_POST["ip_eventDate"];
 		$ind_plat_event = $_POST["ip_eventName"];
 		$ind_plat_reason = $_POST["ip_reason"];
-		
+
 		// Deletion of an entry.
 		$ind_plat_id = $_POST["ip_id"];
-		
+
 		$indigo_plateau = new IndigoPlateau();
-		
+
 		//
 		// Checks for hidden variable to know which action to take
 		// then insert or delete an entry, accordingly.
@@ -69,19 +69,27 @@
 			$indigo_plateau->delete_entry( $ind_plat_id );
 			unset( $_POST["ip_delete_secret_stuff"] );
 		}
-		
+
 		// This is the same output from the shortcode [indigo_plateau_ranking].
 		echo $indigo_plateau->print_ranking();
 
 		// Just to make sure how the table will be rendered. Same as
 		// [indigo_plateau_reasons].
 		//echo $indigo_plateau->print_reasons();
+
+    wp_enqueue_script('jquery-ui-datepicker');
+    wp_enqueue_script('jquery-ui-autocomplete');
 	?>
 
-<script type="text/javascript">
-	jQuery(document).ready(function() {
-		jQuery("#datepicker").datepicker({ dateFormat: "yy-mm-dd" });
-		jQuery("#accordion").accordion({ header: "h3", active: false, collapsible: true });
-	});
-</script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+      jQuery(".ip-datepicker").datepicker({ dateFormat: "yy-mm-dd" });
+      jQuery(".ip-insert-name").autocomplete({
+        source: [] // ["name1", "name2", ...]
+      });
+      jQuery(".ip-insert-event").autocomplete({
+        source: [] // ["event1", "event2", ...]
+      });
+    });
+  </script>
 </div>

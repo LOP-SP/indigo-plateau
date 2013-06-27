@@ -195,28 +195,34 @@ class IndigoPlateau {
         return $html;
     }
 
-    // Returns a table of players.
     public function print_ranking() {
-	// Create a HTML table with jQuery UI's accordion markup.
-	$players = $this->create_players($this->get_rows());
-	$html = '';
+        $players = $this->create_players($this->get_rows());
+        $html = '';
 
-	$html .= "<div id='accordion'>";
-	
-	foreach ($players as $name => $attrs) {
-		$html .= "<h3>" . $name  . "</h3>";
-		$html .= "<ul>";
+        $html .= "<ul class=\"ip-ranking ip-accordion\">";
 
-		foreach ($attrs["history"] as $line) {
-			$html .= "<li>" . $line["event"] . "</li>";
-		}
+        foreach ($players as $name => $attrs) {
+            $html .= "<li>";
+            $html .= "<span class=\"ip-player-name\">" . $name  . "</span>";
+            $html .= "<span class=\"ip-player-total\">" . $attrs["total"] . "</span>";
+            $html .= "</li><li>";
+            $html .= "<ul class=\"ip-player-history\">";
 
-		$html .= "</ul>";
-	}
+            foreach ($attrs["history"] as $line) {
+                $html .= "<li class=\"ip-player-history-point\">";
+                $html .= "<span>" . $line["time"] . "</span>";
+                $html .= "<span>" . $line["event"] . "</span>";
+                $html .= "<span>" . $line["reason"] . "</span>";
+                $html .= "<span>" . $line["points"] . "</span>";
+                $html .= "</li>";
+            }
 
-	$html .= "</div>";
+            $html .= "</ul>";
+        }
 
-	return $html;
+        $html .= "</li>";
+
+        return $html;
     }
 
     public function return_json() {
@@ -244,8 +250,8 @@ function indigo_plateau_admin_actions() {
 
 add_action('admin_menu', 'indigo_plateau_admin_actions');
 
-// Yay jQuery!!!
-wp_enqueue_script('jquery-ui-datepicker');
+// jQuery UI's accordion is used to show a pretty table of player data.
 wp_enqueue_script('jquery-ui-accordion');
+wp_enqueue_script(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.js');
 wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 ?>
