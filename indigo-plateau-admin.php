@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h2>Indigo Plateau Input Menu</h2>
+	<h2>Indigo Plateau</h2>
 
 	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
 		<input type="hidden" name="ip_input_secret_stuff" value="asdf" />
@@ -25,7 +25,7 @@
 			</select><br />
 
 		<p class="submit">
-			<input type="submit" name="submit" value="Adicionar registro" />
+			<input type="submit" name="submit" value="Adicionar registro" class="button-primary" />
 		</p>
 	</form>
 
@@ -36,7 +36,7 @@
 			<input type="text" name="ip_id" /><br />
 
 		<p class="submit">
-			<input type="submit" name="submit" value="Apagar registro" />
+			<input type="submit" name="submit" value="Apagar registro" class="button-primary" />
 		</p>
 	</form>
 
@@ -70,12 +70,8 @@
 			unset( $_POST["ip_delete_secret_stuff"] );
 		}
 
-		// This is the same output from the shortcode [indigo_plateau_ranking].
-		echo $indigo_plateau->print_ranking();
-
-		// Just to make sure how the table will be rendered. Same as
-		// [indigo_plateau_reasons].
-		//echo $indigo_plateau->print_reasons();
+    // Show the current ranking table.
+		echo $indigo_plateau->print_ranking("2013");
 
     wp_enqueue_script('jquery-ui-datepicker');
     wp_enqueue_script('jquery-ui-autocomplete');

@@ -135,10 +135,12 @@ class IndigoPlateau {
     // Helpers.
     //
 
-    public function get_rows() {
+    public function get_rows($year) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'indigo_plateau';
-        return $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time FROM $table_name"));
+        return $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time
+                                                  FROM $table_name
+                                                  WHERE YEAR(time) = $year"));
     }
 
     //
@@ -195,12 +197,12 @@ class IndigoPlateau {
         return $html;
     }
 
-    public function print_ranking() {
-        $players = $this->create_players($this->get_rows());
-        $html = '';
+    // Returns a HTML representation of the players from some year.
+    public function print_ranking($year) {
+        $players = $this->create_players($this->get_rows($year));
+        $html = "<ul class=\"ip-ranking ip-accordion\">";
 
-        $html .= "<ul class=\"ip-ranking ip-accordion\">";
-
+        // Produce a "row" for each player, already with the accordion classes.
         foreach ($players as $name => $attrs) {
             $html .= "<li>";
             $html .= "<span class=\"ip-player-name\">" . $name  . "</span>";
@@ -216,10 +218,8 @@ class IndigoPlateau {
                 $html .= "<span>" . $line["points"] . "</span>";
                 $html .= "</li>";
             }
-
             $html .= "</ul>";
         }
-
         $html .= "</li>";
 
         return $html;
@@ -237,7 +237,21 @@ $indigo_plateau = new IndigoPlateau();
 register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($indigo_plateau, 'init'));
 
 //
-// Menu stuff
+// Shortcode [indigo_plateau_ranking year="2013"].
+//
+
+function ip_ranking($atts) {
+  extract(shortcode_atts(array(
+		'year' => '2013', // Maybe use the current year automatically? Well.
+	), $atts));
+
+	return $indigo_plateau->print_ranking($year);
+}
+
+add_shortcode('indigo_plateau_ranking', 'ip_ranking');
+
+//
+// Admin panel configuration.
 //
 
 function indigo_plateau_admin() {
