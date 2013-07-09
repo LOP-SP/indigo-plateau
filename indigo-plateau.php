@@ -24,37 +24,45 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// Class declaration
 class IndigoPlateau {
+    var $table_name = '';
+
     // Reasons array, used to calculate the points gained by the
     // participants.
-    protected $reasons = array(
+    //
+    // This should be stored (somehow) as a "property" in WP's database and
+    // should be editable.
+    var $reasons = array(
         "ganharTorneio" => array(15, 'Vencer um torneio'),
         "perderFinal" => array(10, 'Perder na final de um torneio'),
         "perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
         "defenderGinasio" => array(10, 'Defender um ginásio'),
-        "trazerAmigo" => array(5, 'Trazer um amigo para participar da LOP-SP pela primeira vez'),
-        "criarPost" => array(5, 'Escrever uma postagem para ser publicada no nosso site'),
+        "trazerAmigo" => array(5, 'Trazer um amigo para jogar pela primeira vez'),
+        "criarPost" => array(5, 'Escrever uma postagem para nosso site'),
         "criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
     );
 
+    /*
+     * Constructor. Hurr durr.
+    */
     public function __construct() {
-        // Shortcodes used to display tables easily.
-        add_shortcode('indigo_plateau_reasons', array($this, 'print_reasons'));
-        add_shortcode('indigo_plateau_ranking', array($this, 'print_ranking'));
+        global $wpdb;
+        $this->table_name = $wpdb->prefix . 'indigo_plateau';
+
+        register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($this, 'init'));
     }
 
     // Create a table indigo_plateau with WP's prefix.
+    // Shouldn't store the points in the database, only the reasons.
     public function init() {
         global $wpdb;
+        $table = $this->table_name;
 
-        $table_name = $wpdb->prefix . 'indigo_plateau';
-
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
                     id int NOT NULL AUTO_INCREMENT,
                     name VARCHAR(255) NOT NULL,
-                    time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                    event text DEFAULT '' NOT NULL,
+                    time DATETIME NOT NULL,
+                    event text NOT NULL,
                     reason VARCHAR(255) NOT NULL,
                     points int NOT NULL,
                     UNIQUE KEY id (id)
@@ -70,11 +78,11 @@ class IndigoPlateau {
     // These methods should be part of an Entry (with a better name) class.
     public function insert_entry($name, $time, $event, $reason) {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'indigo_plateau';
+        $table = $this->table_name;
         $points = $this->reasons[$reason][0];
 
         $wpdb->insert(
-            $table_name,
+            $table,
             array(
                 'name' => $name,
                 'time' => $time,
@@ -94,15 +102,11 @@ class IndigoPlateau {
 
     public function delete_entry($id) {
         global $wpdb;
-        $table_name = $wpdb->prefix . "indigo_plateau";
-
-        $wpdb->query("DELETE FROM $table_name WHERE id = $id");
+        $table = $this->table_name;
+        $wpdb->query("DELETE FROM $table WHERE id = $id");
     }
 
     public function edit_entry($id, $name, $time, $event, $reason, $points) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . "indigo_plateau";
-
         // Update the entry with $id.
 
         // $wpdb->update(
@@ -137,9 +141,9 @@ class IndigoPlateau {
 
     public function get_rows($year) {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'indigo_plateau';
+        $table = $this->table_name;
         return $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time
-                                                  FROM $table_name
+                                                  FROM $table
                                                   WHERE YEAR(time) = $year"));
     }
 
@@ -200,55 +204,57 @@ class IndigoPlateau {
     // Returns a HTML representation of the players from some year.
     public function print_ranking($year) {
         $players = $this->create_players($this->get_rows($year));
-        $html = "<ul class=\"ip-ranking ip-accordion\">";
+        $html = "<div class=\"ip-ranking ip-accordion\">";
 
         // Produce a "row" for each player, already with the accordion classes.
         foreach ($players as $name => $attrs) {
-            $html .= "<li>";
-            $html .= "<span class=\"ip-player-name\">" . $name  . "</span>";
-            $html .= "<span class=\"ip-player-total\">" . $attrs["total"] . "</span>";
-            $html .= "</li><li>";
-            $html .= "<ul class=\"ip-player-history\">";
+            // Name and total points.
+            $html .= "<h3>$name <small>" . $attrs["total"] . "</small></h3>";
 
+            // Player history.
+            $html .= "<ul>";
             foreach ($attrs["history"] as $line) {
-                $html .= "<li class=\"ip-player-history-point\">";
-                $html .= "<span>" . $line["time"] . "</span>";
+                $date_of_occurrence = DateTime::createFromFormat("Y-m-d H:i:s", $line["time"])->format("d/m");
+                $reason_text = $this->reasons[$line["reason"]][1];
+
+                $html .= "<li>";
+                $html .= "<span>" . $date_of_occurrence . "</span>";
                 $html .= "<span>" . $line["event"] . "</span>";
-                $html .= "<span>" . $line["reason"] . "</span>";
+                $html .= "<span>" . $reason_text . "</span>";
                 $html .= "<span>" . $line["points"] . "</span>";
                 $html .= "</li>";
             }
             $html .= "</ul>";
         }
-        $html .= "</li>";
+        $html .= "</div>";
 
         return $html;
     }
 
     public function return_json() {
         header("Content-Type: application/json");
-        echo $this->jsonify_players($this->get_rows());
+        echo $this->json_encode(create_players($this->get_rows()));
     }
 }
 
-$indigo_plateau = new IndigoPlateau();
-
-// Called when the plugin is activated.
-register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($indigo_plateau, 'init'));
+// $indigo_plateau = new IndigoPlateau();
 
 //
 // Shortcode [indigo_plateau_ranking year="2013"].
 //
 
 function ip_ranking($atts) {
-  extract(shortcode_atts(array(
-		'year' => '2013', // Maybe use the current year automatically? Well.
-	), $atts));
+    extract(shortcode_atts(array(
+        'year' => '2013', // Maybe use the current year automatically? Well.
+    ), $atts));
 
-	return $indigo_plateau->print_ranking($year);
+    $ip = new IndigoPlateau;
+    $ranking = $ip->print_ranking($year);
+
+	return $ranking;
 }
 
-add_shortcode('indigo_plateau_ranking', 'ip_ranking');
+add_shortcode('ranking', 'ip_ranking');
 
 //
 // Admin panel configuration.
@@ -264,8 +270,25 @@ function indigo_plateau_admin_actions() {
 
 add_action('admin_menu', 'indigo_plateau_admin_actions');
 
+//
+// Scripts.
+//
+
 // jQuery UI's accordion is used to show a pretty table of player data.
-wp_enqueue_script('jquery-ui-accordion');
-wp_enqueue_script(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.js');
+wp_enqueue_script('jquery');
+wp_enqueue_script('jquery-ui-accordion', true);
+
+// Register IP's script with its dependencies.
+wp_register_script('indigo-plateau', plugins_url('indigo-plateau/indigo-plateau.js'), array('jquery', 'jquery-ui-accordion'));
+wp_enqueue_script('indigo-plateau');
+
+//
+// Stylesheets.
+//
+
 wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+
+// Register IP's stylesheet. There aren't dependencies.
+wp_register_style('indigo-plateau-style', plugins_url('indigo-plateau/indigo-plateau.css'));
+wp_enqueue_style('indigo-plateau-style');
 ?>

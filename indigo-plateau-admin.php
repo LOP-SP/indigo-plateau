@@ -40,52 +40,52 @@
 		</p>
 	</form>
 
-	<?php
-		//
-		// Get the variables needed for a new entry or deletion of one.
-		//
+    <script type="text/javascript">
+      jQuery(document).ready(function() {
+        jQuery(".ip-datepicker").datepicker({ dateFormat: "yy-mm-dd" });
+        jQuery(".ip-insert-name").autocomplete({
+          source: ["Carlos Dog", "Willian Hidro", "Ciro Chocotone"] // ["name1", "name2", ...]
+        });
+        jQuery(".ip-insert-event").autocomplete({
+          source: ["Anime Friends", "Anime Dreams", "Anime Festival"] // ["event1", "event2", ...]
+        });
+      });
+    </script>
 
-		// Addition of an entry.
-		$ind_plat_name = $_POST["ip_playerName"];
-		$ind_plat_time = $_POST["ip_eventDate"];
-		$ind_plat_event = $_POST["ip_eventName"];
-		$ind_plat_reason = $_POST["ip_reason"];
+    <?php
+    //
+    // Get the variables needed for a new entry or deletion of one.
+    //
 
-		// Deletion of an entry.
-		$ind_plat_id = $_POST["ip_id"];
+    // Addition of an entry.
+    $ind_plat_name = $_POST["ip_playerName"];
+    $ind_plat_time = $_POST["ip_eventDate"];
+    $ind_plat_event = $_POST["ip_eventName"];
+    $ind_plat_reason = $_POST["ip_reason"];
 
-		$indigo_plateau = new IndigoPlateau();
+    // Deletion of an entry.
+    $ind_plat_id = $_POST["ip_id"];
 
-		//
-		// Checks for hidden variable to know which action to take
-		// then insert or delete an entry, accordingly.
-		//
-		if ( isset( $_POST["ip_input_secret_stuff"] ) ) {
-			$indigo_plateau->insert_entry( $ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason );
-			unset($_POST["ip_input_secret_stuff"]);
-		}
+    $indigo_plateau = new IndigoPlateau();
 
-		if ( isset( $_POST["ip_delete_secret_stuff"] ) ) {
-			$indigo_plateau->delete_entry( $ind_plat_id );
-			unset( $_POST["ip_delete_secret_stuff"] );
-		}
+    //
+    // Checks for hidden variable to know which action to take
+    // then insert or delete an entry, accordingly.
+
+    if ( isset( $_POST["ip_input_secret_stuff"] ) ) {
+        $indigo_plateau->insert_entry($ind_plat_name, $ind_plat_time, $ind_plat_event, $ind_plat_reason);
+        unset($_POST["ip_input_secret_stuff"]);
+    }
+
+    if ( isset( $_POST["ip_delete_secret_stuff"] ) ) {
+        $indigo_plateau->delete_entry( $ind_plat_id );
+        unset( $_POST["ip_delete_secret_stuff"] );
+    }
 
     // Show the current ranking table.
-		echo $indigo_plateau->print_ranking("2013");
+    echo $indigo_plateau->print_ranking("2013");
 
     wp_enqueue_script('jquery-ui-datepicker');
     wp_enqueue_script('jquery-ui-autocomplete');
-	?>
-
-  <script type="text/javascript">
-    jQuery(document).ready(function() {
-      jQuery(".ip-datepicker").datepicker({ dateFormat: "yy-mm-dd" });
-      jQuery(".ip-insert-name").autocomplete({
-        source: [] // ["name1", "name2", ...]
-      });
-      jQuery(".ip-insert-event").autocomplete({
-        source: [] // ["event1", "event2", ...]
-      });
-    });
-  </script>
+    ?>
 </div>

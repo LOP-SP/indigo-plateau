@@ -29,22 +29,31 @@
 	}
 }
 
-ul.ip-ranking {
+div.ip-ranking {
+  width: 95%;
+  margin: auto;
+}
+
+/* Player's names. */
+div.ip-ranking h3 {
+  margin-bottom: 0;
+}
+
+/* Player's total points. */
+div.ip-ranking h3 small {
 
 }
 
-span.ip-player-name {
+/* Player's history. */
+div.ip-ranking ul {
 
 }
 
-span.ip-player-total {
+/* An entry from a player's history. */
+div.ip-ranking ul li {
 
 }
 
-span.ip-player-history {
-
-}
-
-span.ip-player-history-point {
-
+div.ip-ranking ul li span {
+  padding-right: 10px;
 }
