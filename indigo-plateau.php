@@ -174,6 +174,13 @@ class IndigoPlateau {
                                                               "points" => $row->points));
         }
 
+        // Sort the players according to their total points.
+        $points = array();
+        foreach ($players as $key => $value) {
+            $points[$key] = $players[$key]["total"];
+        }
+        array_multisort($points, SORT_DESC, $players);
+
         return $players;
     }
 
