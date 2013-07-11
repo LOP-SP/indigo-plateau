@@ -25,22 +25,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 class IndigoPlateau {
-    var $table_name = '';
+    var $table_name;
 
     // Reasons array, used to calculate the points gained by the
     // participants.
     //
     // This should be stored (somehow) as a "property" in WP's database and
     // should be editable.
-    var $reasons = array(
-        "ganharTorneio" => array(15, 'Vencer um torneio'),
-        "perderFinal" => array(10, 'Perder na final de um torneio'),
-        "perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
-        "defenderGinasio" => array(10, 'Defender um ginásio'),
-        "trazerAmigo" => array(5, 'Trazer um amigo para jogar pela primeira vez'),
-        "criarPost" => array(5, 'Escrever uma postagem para nosso site'),
-        "criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
-    );
+    var $reasons;
 
     /*
      * Constructor. Hurr durr.
@@ -48,6 +40,16 @@ class IndigoPlateau {
     public function __construct() {
         global $wpdb;
         $this->table_name = $wpdb->prefix . 'indigo_plateau';
+
+        $this->reasons = array(
+            "ganharTorneio" => array(15, 'Vencer um torneio'),
+            "perderFinal" => array(10, 'Perder na final de um torneio'),
+            "perderQuartas" => array(5, 'Perder nas quartas de final de um torneio'),
+            "defenderGinasio" => array(10, 'Defender um ginásio'),
+            "trazerAmigo" => array(5, 'Trazer um amigo para jogar pela primeira vez'),
+            "criarPost" => array(5, 'Escrever uma postagem para nosso site'),
+            "criarRegra" => array(5, 'Criar uma sugestão de regra que seja aceita')
+        );
 
         register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($this, 'init'));
     }
