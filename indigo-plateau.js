@@ -5,7 +5,7 @@
 
 jQuery(document).ready(function() {
     jQuery(".ip-accordion").accordion({
-        heightStyle: "auto",
+        heightStyle: "content",
         icons: false,
         collapsible: true,
         active: false
