@@ -145,8 +145,8 @@ class IndigoPlateau {
         global $wpdb;
         $table = $this->table_name;
         return $wpdb->get_results($wpdb->prepare("SELECT name, event, reason, points, time
-                                                  FROM %s
-                                                  WHERE YEAR(time) = %s", $table, $year));
+                                                  FROM $table
+                                                  WHERE YEAR(time) = $year", ""));
     }
 
     //
