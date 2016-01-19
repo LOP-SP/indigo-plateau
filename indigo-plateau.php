@@ -246,15 +246,13 @@ class IndigoPlateau {
     }
 }
 
-// $indigo_plateau = new IndigoPlateau();
-
 //
-// Shortcode [indigo_plateau_ranking year="2013"].
+// Shortcode [ranking year="2015"].
 //
 
 function ip_ranking($atts) {
     extract(shortcode_atts(array(
-        'year' => '2013', // Maybe use the current year automatically? Well.
+        'year' => date("Y"),
     ), $atts));
 
     $ip = new IndigoPlateau;
