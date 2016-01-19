@@ -80,7 +80,7 @@
     }
 
     // Show the current ranking table.
-    echo $indigo_plateau->print_ranking("2013");
+    echo $indigo_plateau->print_ranking("2015");
 
     wp_enqueue_script('jquery-ui-datepicker');
     wp_enqueue_script('jquery-ui-autocomplete');
