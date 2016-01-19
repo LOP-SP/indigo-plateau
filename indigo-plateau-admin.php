@@ -18,10 +18,7 @@
 				<option value="ganharTorneio">Ganhar um torneio - 15 pontos</option>
 				<option value="perderFinal">Perder na final de um torneio - 10 pontos</option>
 				<option value="perderQuartas">Perder nas quartas de final de um torneio - 5 pontos</option>
-				<option value="defenderGinasio">Defender um gin&aacute;sio - 10 pontos</option>
-				<option value="trazerAmigo">Trazer um amigo para participar de torneio - 5 pontos</option>
-				<option value="criarPost">Criar um post para o site da LOP-SP - 5 pontos</option>
-				<option value="criarRegra">Criar uma regra aceita pela LOP-SP - 5 pontos</option>
+				<option value="defenderGinasio">Defender um ginásio - 15 pontos</option>
 			</select><br />
 
 		<p class="submit">
