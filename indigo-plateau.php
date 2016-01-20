@@ -24,6 +24,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
 class IndigoPlateau {
     var $table_name;
 
@@ -35,7 +37,7 @@ class IndigoPlateau {
     var $reasons;
 
     /*
-     * Constructor. Hurr durr.
+     * Constructor.
     */
     public function __construct() {
         global $wpdb;
@@ -48,7 +50,10 @@ class IndigoPlateau {
             "defenderGinasio" => array(15, 'Defender um ginásio')
         );
 
-        register_activation_hook(WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php', array($this, 'init'));
+        register_activation_hook(
+          WP_PLUGIN_DIR . '/indigo-plateau/indigo-plateau.php',
+          array($this, 'init')
+        );
     }
 
     // Create a table indigo_plateau with WP's prefix.
@@ -220,7 +225,8 @@ class IndigoPlateau {
             // Player history.
             $html .= "<ul>";
             foreach ($attrs["history"] as $line) {
-                $date_of_occurrence = DateTime::createFromFormat("Y-m-d H:i:s", $line["time"])->format("d/m");
+                $date_of_occurrence = DateTime::createFromFormat(
+                    "Y-m-d H:i:s", $line["time"])->format("d/m");
                 $reason_text = $this->reasons[$line["reason"]][1];
 
                 $html .= "<li>";
@@ -269,7 +275,13 @@ function indigo_plateau_admin() {
 }
 
 function indigo_plateau_admin_actions() {
-    add_options_page('Indigo Plateau', 'Indigo Plateau', 10, basename(__FILE__), 'indigo_plateau_admin');
+    add_options_page(
+        'Indigo Plateau',
+        'Indigo Plateau',
+        10,
+        basename(__FILE__),
+        'indigo_plateau_admin'
+    );
 }
 
 add_action('admin_menu', 'indigo_plateau_admin_actions');
@@ -283,14 +295,21 @@ wp_enqueue_script('jquery');
 wp_enqueue_script('jquery-ui-accordion', true);
 
 // Register IP's script with its dependencies.
-wp_register_script('indigo-plateau', plugins_url('indigo-plateau/indigo-plateau.js'), array('jquery', 'jquery-ui-accordion'));
+wp_register_script(
+    'indigo-plateau',
+    plugins_url('indigo-plateau/indigo-plateau.js'),
+    array('jquery', 'jquery-ui-accordion')
+);
 wp_enqueue_script('indigo-plateau');
 
 //
 // Stylesheets.
 //
 
-wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+wp_enqueue_style(
+    'jquery-style',
+    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css'
+);
 
 // Register IP's stylesheet. There aren't dependencies.
 wp_register_style('indigo-plateau-style', plugins_url('indigo-plateau/indigo-plateau.css'));
