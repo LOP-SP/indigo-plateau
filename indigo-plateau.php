@@ -38,11 +38,12 @@ class IndigoPlateau {
 
     /*
      * Constructor.
-    */
+     */
     public function __construct() {
         global $wpdb;
         $this->table_name = $wpdb->prefix . 'indigo_plateau';
 
+        // TODO: Do not hardcode this.
         $this->reasons = array(
             "ganharTorneio" => array(15, 'Vencer um torneio'),
             "perderFinal" => array(10, 'Perder na final de um torneio'),
